@@ -18,21 +18,23 @@ public class ProductsController {
         this.productDao = productDao;
     }
 
+
     @GetMapping()
-    public String index(Model model){
+    public String index(Model model) {
         //Получим все продукты из DAO и передадим на отображение в представление
+
         model.addAttribute("products", productDao.index());     //под ключом "products" будет лежать список из продуктов
-        return "products/index";
+            return "products/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model){
+    public String show(@PathVariable("id") int id, Model model) {
         //Получим один продукт из DAO и передадим на отображение в представление
         model.addAttribute("product", productDao.show(id));
         return "products/show";
     }
 
-    @GetMapping("/new")
+        @GetMapping("/new")
     public String newProduct(@ModelAttribute("product") Product product){
         return "products/new";      //название таймлиф шаблона, где будет лежать форма для создания нового продукта
     }
@@ -70,4 +72,5 @@ public class ProductsController {
         productDao.delete(id);
         return "redirect:/products";
     }
+
 }
