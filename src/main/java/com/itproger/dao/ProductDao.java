@@ -1,7 +1,10 @@
 package com.itproger.dao;
 
+import com.itproger.Exception.NotFoundException;
 import com.itproger.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -24,9 +27,14 @@ public class ProductDao {
 
     public Product show(int id) {               // возвращаем один продукт по id
         return jdbcTemplate.query("SELECT * FROM Product WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Product.class))
-                .stream().findAny().orElse(null);       //дополнить ВЫВЕСТИ ПУСТОЙ РЕЗУЛЬТАТ СО СТАТУСОМ 404!!!!
+                .stream().findAny().orElseThrow(() -> new NotFoundException(id));
     }
 
+    //поиск по имени
+    public Product showName(String name) {               // возвращаем один продукт по имени
+        return jdbcTemplate.query("SELECT * FROM Product WHERE name=?", new Object[]{name}, new BeanPropertyRowMapper<>(Product.class))
+                .stream().findAny().orElse(null);       //дополнить ВЫВЕСТИ ПУСТОЙ РЕЗУЛЬТАТ СО СТАТУСОМ 404!!!!
+    }
 
     public void save(Product product) {
         jdbcTemplate.update("INSERT INTO Product(name, specification, price, dateofcreate) VALUES(?, ?, ?, ?)",

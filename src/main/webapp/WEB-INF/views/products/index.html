@@ -7,30 +7,33 @@
 </head>
 
 <body>
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;" >
-   <form class="form-inline pull-xs-left" >
-        <input class="form-control" placeholder="Search id..."/>
-            <button class="btn btn-outline-primary" type="submit">Search</button>
-    </form>
-</nav>
 
-</br>
-
-
+<br/>
 
 <div class="w3-example">
     <h3>Product list</h3>
     <div class="w3-padding w3-white notranslate">
+        </br>
+        <form th:action="@{/products}">
+            <input  type="text"  name="id" placeholder="Search id..."/>
+            <input type="submit" value="Search" />
+        </form >
+        </br>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Name</th>
                     <th>Price</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
+                    <td><div th:each="product : ${products}">
+                        <a th:href="@{/products/{id}(id=${product.getId()})}"
+                           th:text="${product.getId()}">prod</a>
+                    </div></td>
                     <td><div th:each="product : ${products}">
                         <a th:href="@{/products/{id}(id=${product.getId()})}"
                            th:text="${product.getName()}">prod</a>
@@ -52,8 +55,9 @@
 <br/>
 <hr/>
 
-<a href="/products/new" >
-    <h5>Create new product</h5>
-</a>
+<form th:action="@{/products/new}" >
+    <input type="submit" value="Create"  />
+</form>
+
 </body>
 </html>

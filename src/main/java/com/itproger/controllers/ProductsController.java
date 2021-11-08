@@ -2,11 +2,15 @@ package com.itproger.controllers;
 
 import com.itproger.dao.ProductDao;
 import com.itproger.models.Product;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import javax.validation.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/products")
@@ -19,13 +23,34 @@ public class ProductsController {
     }
 
 
-    @GetMapping()
-    public String index(Model model) {
-        //Получим все продукты из DAO и передадим на отображение в представление
+//    @GetMapping()
+//    public String index(Model model) {
+//        //Получим все продукты из DAO и передадим на отображение в представление
+//        model.addAttribute("products", productDao.index());
+////        model.addAttribute("products", productDao.showName("name"));     //под ключом "products" будет лежать список из продуктов
+//        return "products/index";
+//    }
 
-        model.addAttribute("products", productDao.index());     //под ключом "products" будет лежать список из продуктов
-            return "products/index";
+    @GetMapping()
+    public String index(Model model, @RequestParam(defaultValue ="") String name, @RequestParam(defaultValue = "0")int id) {
+        //Получим все продукты из DAO и передадим на отображение в представление
+        model.addAttribute("products", productDao.index());  //под ключом "products" будет лежать список из продуктов
+            if(id != 0)
+                model.addAttribute("products", productDao.show(id));
+//        if(!name.equals(""))
+//        model.addAttribute("products", productDao.showName(name));
+        return "products/index";
     }
+
+
+//    @GetMapping()
+//    public String index(Model model) {
+//        //Получим все продукты из DAO и передадим на отображение в представление
+//
+//        model.addAttribute("products", productDao.index());     //под ключом "products" будет лежать список из продуктов
+//            return "products/index";
+//    }
+
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
